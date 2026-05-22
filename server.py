@@ -38,6 +38,8 @@ class DashboardHandler(http.server.SimpleHTTPRequestHandler):
             self.serve_competitor_news()
         elif self.path == '/api/curated-digest':
             self.serve_curated_digest()
+        elif self.path == '/api/politics':
+            self.serve_politics()
         elif self.path.startswith('/data/logos/'):
             self.serve_logo(self.path)
         elif self.path == '/api/status':
@@ -152,6 +154,20 @@ class DashboardHandler(http.server.SimpleHTTPRequestHandler):
             self.send_json(200, data)
         except Exception as e:
             self.send_json(500, {'error': str(e)})
+
+    def serve_politics(self):
+        """Serve the latest political headlines."""
+        filepath = DATA_DIR / 'politics-latest.json'
+        if not filepath.exists():
+            self.send_json(404, {'error': 'Politics data not found'})
+            return
+        try:
+            content = filepath.read_text(encoding='utf-8', errors='replace')
+            data = json.loads(content)
+        except Exception:
+            self.send_json(500, {'error': 'Could not parse politics data'})
+            return
+        self.send_json(200, data)
 
     def serve_logo(self, path):
         filename = path.split('/')[-1]

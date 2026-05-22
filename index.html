@@ -862,10 +862,32 @@ async function renderCuratedDigest() {
       html += `</ul></div>`;
     }
     
+    // Politics section
+    html += await renderPoliticsSection();
+    
     html += `</div>`;
     return html;
   } catch (e) {
     return `<div class="empty-state"><div class="icon">⚠️</div>Error loading curated digest: ${e.message}</div>`;
+  }
+}
+
+async function renderPoliticsSection() {
+  try {
+    const resp = await fetch('/api/politics');
+    if (!resp.ok) return '';
+    const data = await resp.json();
+    
+    if (!data.articles || data.articles.length === 0) return '';
+    
+    let html = `<div class="digest-category"><h4>🌍 Politics & World News (${data.total})</h4><ul>`;
+    for (const item of data.articles) {
+      html += `<li><a href="${item.url}" target="_blank" rel="noopener">${item.title}</a> <span class="item-source">(${item.source})</span></li>`;
+    }
+    html += `</ul></div>`;
+    return html;
+  } catch (e) {
+    return '';
   }
 }
 
