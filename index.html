@@ -297,6 +297,33 @@
     margin-left: 8px;
   }
 
+  /* HN Card Styles */
+  .hn-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .hn-list li {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .hn-list li:last-child {
+    border-bottom: none;
+  }
+
+  .hn-list li a {
+    color: #a78bfa;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .hn-list li a:hover {
+    color: #c4b5fd;
+  }
+
   .summary-chip .count {
     font-weight: 700;
     color: var(--accent);
@@ -842,6 +869,39 @@ async function renderCuratedDigest() {
   }
 }
 
+async function renderHNCard() {
+  try {
+    const resp = await fetch('/api/output/hn');
+    if (!resp.ok) throw new Error('Failed to load HN data');
+    const data = await resp.json();
+    
+    if (!data || !data.content) {
+      return '<div class="empty-state"><div class="icon">📭</div>No HN data yet</div>';
+    }
+    
+    // Parse markdown content
+    const content = data.content;
+    const lines = content.split('\n');
+    let html = '<div class="hn-card">';
+    html += '<div class="digest-header"><h3>📰 Hacker News</h3><span class="digest-meta">Top stories</span></div>';
+    html += '<ul class="hn-list">';
+    
+    for (const line of lines) {
+      // Match numbered items: 1. **Title** — X pts, Y comments — [link](url) — description
+      const match = line.match(/^\d+\.\s+\*\*(.+?)\*\*\s+—\s+\d+\s+pts,\s+\d+\s+comments\s+—\s+\[(.+?)\]\((.+?)\)\s+—\s+(.+)$/);
+      if (match) {
+        const [, title, linkText, url, description] = match;
+        html += `<li><a href="${url}" target="_blank" rel="noopener">${title}</a> <span class="item-source">(${linkText})</span></li>`;
+      }
+    }
+    
+    html += '</ul></div>';
+    return html;
+  } catch (e) {
+    return `<div class="empty-state"><div class="icon">⚠️</div>Error loading HN: ${e.message}</div>`;
+  }
+}
+
 async function render() {
   updateClock();
 
@@ -872,6 +932,8 @@ async function render() {
       bodyContent = await renderCompetitorCard(data, compData);
     } else if (config.id === 'research-digest') {
       bodyContent = await renderCuratedDigest();
+    } else if (config.id === 'hn') {
+      bodyContent = await renderHNCard();
     } else {
       bodyContent = data && data.content
         ? data.content
