@@ -1,0 +1,59 @@
+{
+  "day": 76,
+  "date": "2026-05-14",
+  "branches": {
+    "C": { "label": "Full Cascade", "central": 51, "range": [40, 64] },
+    "B": { "label": "Extended Attrition", "central": 34, "range": [24, 44] },
+    "A": { "label": "Messy Ceasefire", "central": 9, "range": [2, 14] },
+    "residual": 6
+  },
+  "indices": {
+    "DPI_raw": 78,
+    "DPI_effective": 48,
+    "DQDF": 0.62,
+    "IRI": 61,
+    "CRED": 12,
+    "SSC": 87
+  },
+  "market": {
+    "brent_close": 104,
+    "gas_national": 4.51,
+    "gas_california": 6.28,
+    "gas_prewar": 2.98,
+    "hormuz_flow_pct": 0
+  },
+  "casualties": {
+    "us_kia": 13,
+    "us_wia": 373,
+    "iran_dead_hrana": 3636,
+    "lebanon_dead": 2183,
+    "israel_idf_dead": 15,
+    "israel_civilian_dead": 28,
+    "israel_total_dead": 43
+  },
+  "military": {
+    "iran_launchers_remaining": 150,
+    "iran_launchers_total": 440,
+    "war_cost_us_billions": 35
+  },
+  "optimism": {
+    "positive_signals": 59,
+    "negative_signals": 111,
+    "total_signals": 170,
+    "rate_pct": 35
+  },
+  "key_events_since_last_update": [
+    "April 27: Trump did NOT execute infrastructure strikes at noon ET -- 4th extension; TACO confirmed; CRED dropped to 12",
+    "April 28: Swiss back-channel elevated to Islamabad Protocol 2 Preliminary pre-negotiation framework",
+    "April 27 - May 14: IRGC has not fired on US Navy -- 22-day mutual deterrence window (longest of the war)",
+    "April 27 - May 14: 9 more commercial vessels hit; Chinese tankers at 15% pre-war traffic",
+    "May 1: WPR vote 50-49 FAILED -- Collins (R-ME) first GOP defector; Murkowski held; Fetterman voted no",
+    "May 3: Swiss framework stalled after IRGC hit 3 more commercial vessels; US suspended participation",
+    "May 5-6: Netanyahu Washington visit -- 30-day Lebanon operational pause agreed",
+    "May 7: Lebanon pause took effect; Hezbollah rockets reduced to 9 total since pause (vs. 47 in 2 days pre-pause)",
+    "May 7: Fed held rates 3.50-3.75%; projected 2026 cut eliminated; Powell: path to easing blocked",
+    "May 9: Consumer sentiment preliminary 44.2 -- new record low (beats April 10 record of 47.6)",
+    "May 12: April CPI +4.1% YoY, gasoline +28.6% MoM (new record, beats March +21.2%)",
+    "May 13: Trump approval 34% (new low); 29% Iran war handling (new low)"
+  ]
+}

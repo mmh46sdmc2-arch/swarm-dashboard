@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Swarm Dashboard</title>
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --surface2: #1a1a26;
+    --border: #2a2a3a;
+    --text: #e0e0e8;
+    --text-dim: #8888a0;
+    --accent: #6c5ce7;
+    --accent-glow: rgba(108, 92, 231, 0.15);
+    --green: #00d2a0;
+    --orange: #f0a050;
+    --red: #ff6b6b;
+    --blue: #54a0ff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+
+  .header {
+    padding: 24px 32px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--surface);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(12px);
+  }
+
+  .header h1 {
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .header h1 .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 8px var(--green);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  .header-meta {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+
+  .refresh-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .refresh-btn:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .refresh-btn.spinning svg {
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 24px 32px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .card:hover {
+    border-color: var(--accent);
+  }
+
+  .card-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .card-title {
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .card-title .icon {
+    font-size: 16px;
+  }
+
+  .card-badge {
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .badge-fresh { background: rgba(0, 210, 160, 0.15); color: var(--green); }
+  .badge-stale { background: rgba(240, 160, 80, 0.15); color: var(--orange); }
+  .badge-empty { background: rgba(136, 136, 160, 0.15); color: var(--text-dim); }
+
+  .card-body {
+    padding: 16px 20px;
+    font-size: 14px;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    word-break: break-word;
+    max-height: 500px;
+    overflow-y: auto;
+  }
+
+  .card-body.tall {
+    max-height: 900px;
+  }
+
+  .card-body::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .card-body::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .card-body::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 2px;
+  }
+
+  .card-footer {
+    padding: 10px 20px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--text-dim);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 48px 20px;
+    color: var(--text-dim);
+    font-size: 14px;
+  }
+
+  .empty-state .icon {
+    font-size: 32px;
+    margin-bottom: 12px;
+  }
+
+  .full-width {
+    grid-column: 1 / -1;
+  }
+
+  .summary-bar {
+    display: flex;
+    gap: 12px;
+    padding: 16px 32px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .summary-chip {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* Curated Digest Styles */
+  .curated-digest {
+    padding: 16px 20px;
+  }
+
+  .digest-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .digest-header h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .digest-meta {
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+
+  .digest-category {
+    margin-bottom: 16px;
+  }
+
+  .digest-category h4 {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .digest-category ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .digest-category li {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .digest-category li:last-child {
+    border-bottom: none;
+  }
+
+  .digest-category li a {
+    color: #a78bfa;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .digest-category li a:hover {
+    color: #c4b5fd;
+  }
+
+  .item-source {
+    color: var(--text-dim);
+    font-size: 11px;
+    margin-left: 8px;
+  }
+
+  .summary-chip .count {
+    font-weight: 700;
+    color: var(--accent);
+    font-size: 16px;
+  }
+
+  /* ── Competitors Rich Card Styles ── */
+  .comp-threat-summary {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  .comp-threat-chip {
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .comp-threat-chip.critical { background: rgba(255,68,68,0.15); color: #ff4444; border: 1px solid rgba(255,68,68,0.3); }
+  .comp-threat-chip.high { background: rgba(255,136,0,0.15); color: #ff8800; border: 1px solid rgba(255,136,0,0.3); }
+  .comp-threat-chip.medium { background: rgba(170,170,170,0.15); color: #aaaaaa; border: 1px solid rgba(170,170,170,0.3); }
+
+  .comp-market-context {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    font-size: 12px;
+    color: var(--text-dim);
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .comp-market-context span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .comp-market-context strong {
+    color: var(--text);
+  }
+
+  .comp-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .comp-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+
+  .comp-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-1px);
+  }
+
+  .comp-card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+
+  .comp-logo {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: white;
+    padding: 4px;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+
+  .comp-logo-placeholder {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-dim);
+    flex-shrink: 0;
+  }
+
+  .comp-name-row {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .comp-name {
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .comp-category {
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-top: 2px;
+  }
+
+  .comp-threat-badge {
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    flex-shrink: 0;
+  }
+
+  .comp-threat-badge.critical { background: rgba(255,68,68,0.2); color: #ff4444; }
+  .comp-threat-badge.high { background: rgba(255,136,0,0.2); color: #ff8800; }
+  .comp-threat-badge.medium { background: rgba(170,170,170,0.2); color: #aaaaaa; }
+
+  .comp-stats {
+    display: flex;
+    gap: 16px;
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+  }
+
+  .comp-stats span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .comp-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+
+  .comp-tag {
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    background: rgba(108, 92, 231, 0.1);
+    color: var(--accent);
+    border: 1px solid rgba(108, 92, 231, 0.2);
+  }
+
+  .comp-tag.yes { background: rgba(0, 210, 160, 0.1); color: var(--green); border-color: rgba(0, 210, 160, 0.2); }
+  .comp-tag.no { background: rgba(136, 136, 160, 0.08); color: var(--text-dim); border-color: rgba(136, 136, 160, 0.15); }
+
+  .comp-threat-analysis {
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.5;
+    display: none;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+  }
+
+  .comp-card.expanded .comp-threat-analysis {
+    display: block;
+  }
+
+  /* ── Critical threat card — red glow ── */
+  .comp-card.critical {
+    border-color: rgba(255,68,68,0.4);
+    background: linear-gradient(135deg, rgba(255,68,68,0.06) 0%, var(--surface2) 100%);
+    box-shadow: 0 0 20px rgba(255,68,68,0.1);
+  }
+  .comp-card.critical:hover {
+    border-color: rgba(255,68,68,0.7);
+    box-shadow: 0 0 30px rgba(255,68,68,0.2);
+  }
+
+  .comp-critical-banner {
+    display: none;
+    background: linear-gradient(90deg, rgba(255,68,68,0.2), rgba(255,68,68,0.05));
+    border: 1px solid rgba(255,68,68,0.4);
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-bottom: 16px;
+    font-size: 13px;
+    color: #ff6b6b;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .comp-news-section {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border);
+  }
+
+  .comp-news-item {
+    font-size: 11px;
+    color: var(--text-dim);
+    padding: 3px 0 3px 12px;
+    position: relative;
+    line-height: 1.4;
+  }
+
+  .comp-news-item::before {
+    content: '📰';
+    position: absolute;
+    left: 0;
+    font-size: 9px;
+  }
+
+  .comp-news-item a {
+    color: #a78bfa;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .comp-news-item a:hover {
+    color: #c4b5fd;
+  }
+
+  .comp-news-label {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-dim);
+    margin-bottom: 4px;
+  }
+
+  .comp-section-title {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-dim);
+    margin-bottom: 4px;
+  }
+
+  .comp-section-title.strengths { color: var(--green); }
+  .comp-section-title.weaknesses { color: var(--red); }
+
+  .comp-detail-list {
+    list-style: none;
+    padding: 0;
+    margin: 4px 0 10px 0;
+  }
+
+  .comp-detail-list li {
+    font-size: 12px;
+    color: var(--text-dim);
+    padding: 2px 0;
+    padding-left: 14px;
+    position: relative;
+  }
+
+  .comp-detail-list li::before {
+    content: '›';
+    position: absolute;
+    left: 0;
+    color: var(--text-dim);
+    font-weight: 700;
+  }
+
+  .comp-expand-hint {
+    font-size: 10px;
+    color: var(--text-dim);
+    text-align: right;
+    margin-top: 4px;
+  }
+
+  .comp-card.expanded .comp-expand-hint::after { content: 'click to collapse'; }
+  .comp-card:not(.expanded) .comp-expand-hint::after { content: 'click for details'; }
+
+  @media (max-width: 600px) {
+    .grid { grid-template-columns: 1fr; padding: 16px; }
+    .header { padding: 16px; }
+    .summary-bar { padding: 16px; flex-wrap: wrap; }
+    .comp-market-context { flex-direction: column; gap: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1><span class="dot"></span> Swarm Dashboard</h1>
+  <div class="header-meta">
+    <span id="clock"></span>
+    <button class="refresh-btn" onclick="refreshAll()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+      Refresh
+    </button>
+  </div>
+</div>
+
+<div class="summary-bar" id="summary-bar"></div>
+
+<div class="grid" id="grid"></div>
+
+<script>
+const JOB_CONFIGS = [
+  { id: 'competitors', name: 'BambooHR Competitors', icon: '🏢', freq: 'Every 6h', color: '#ff4444' },
+  { id: 'research-digest', name: 'Research Digest', icon: '📡', freq: 'Daily', color: '#6c5ce7' },
+  { id: 'hn', name: 'Hacker News', icon: '📰', freq: 'Every 3h', color: '#ff6b35' },
+  { id: 'polymarket', name: 'Polymarket', icon: '📊', freq: 'Every 4h', color: '#00d2a0' },
+  { id: 'github', name: 'GitHub Trending', icon: '🐙', freq: 'Every 6h', color: '#54a0ff' },
+  { id: 'techblogs', name: 'Tech Blogs', icon: '📝', freq: 'Every 6h', color: '#f0a050' },
+  { id: 'papers', name: 'AI Papers', icon: '📄', freq: 'Every 8h', color: '#ff6b6b' },
+  { id: 'github-repos', name: 'Your GitHub Repos', icon: '📦', freq: 'Every 6h', color: '#54a0ff' },
+];
+
+function updateClock() {
+  const now = new Date();
+  document.getElementById('clock').textContent = now.toLocaleString('en-US', {
+    weekday: 'short', month: 'short', day: 'numeric',
+    hour: '2-digit', minute: '2-digit', second: '2-digit'
+  });
+}
+
+function timeAgo(timestamp) {
+  if (!timestamp) return 'Never';
+  const diff = Date.now() - timestamp;
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1) return 'Just now';
+  if (mins < 60) return `${mins}m ago`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return `${hrs}h ${mins % 60}m ago`;
+  const days = Math.floor(hrs / 24);
+  return `${days}d ${hrs % 24}h ago`;
+}
+
+function freshness(timestamp) {
+  if (!timestamp) return 'empty';
+  const diff = Date.now() - timestamp;
+  if (diff < 3600000) return 'fresh';
+  if (diff < 86400000) return 'fresh';
+  return 'stale';
+}
+
+function freshnessLabel(status) {
+  if (status === 'fresh') return 'Fresh';
+  if (status === 'stale') return 'Stale';
+  return 'No Data';
+}
+
+async function loadJob(jobId) {
+  try {
+    const resp = await fetch(`/api/output/${jobId}`);
+    if (!resp.ok) return null;
+    const data = await resp.json();
+    return data;
+  } catch (e) {
+    return null;
+  }
+}
+
+async function loadCompetitorData() {
+  try {
+    const resp = await fetch('/api/competitors-data');
+    if (!resp.ok) return null;
+    return await resp.json();
+  } catch (e) {
+    return null;
+  }
+}
+
+async function refreshAll() {
+  const btn = document.querySelector('.refresh-btn');
+  btn.classList.add('spinning');
+  setTimeout(() => btn.classList.remove('spinning'), 1000);
+  render();
+}
+
+async function renderCompetitorCard(data, compData) {
+  if (!data || !data.content) {
+    return `<div class="empty-state"><div class="icon">📭</div>No data yet — waiting for first run</div>`;
+  }
+
+  if (!compData || !compData.competitors) {
+    return `<div class="empty-state"><div class="icon">⚠️</div>Rich competitor data not yet loaded</div>`;
+  }
+
+  const ctx = compData.marketContext;
+  const threats = compData.threatSummary;
+  const competitors = compData.competitors;
+
+  // Sort: Critical first, then High, then Medium
+  const threatOrder = { CRITICAL: 0, HIGH: 1, MEDIUM: 2 };
+  const sorted = [...competitors].sort((a, b) => ((threatOrder[a.threatLevel] !== undefined ? threatOrder[a.threatLevel] : 3)) - ((threatOrder[b.threatLevel] !== undefined ? threatOrder[b.threatLevel] : 3)));
+
+  // Load news data
+  let newsData = null;
+  try {
+    const newsResp = await fetch('/api/competitor-news');
+    if (newsResp.ok) newsData = await newsResp.json();
+  } catch(e) {}
+
+  let html = '';
+
+  // 🔥 Critical threat banner
+  const criticalCount = threats.critical;
+  if (criticalCount > 0) {
+    html += `<div class="comp-critical-banner" style="display:flex">`;
+    html += `<span style="font-size:18px">🔥</span>`;
+    html += `<span>${criticalCount} CRITICAL threat${criticalCount > 1 ? 's' : ''} detected — Rippling's unified platform model is the most dangerous competitive force in the SMB/Mid-Market space</span>`;
+    html += `</div>`;
+  }
+
+  // Threat summary chips
+  html += `<div class="comp-threat-summary">`;
+  html += `<span class="comp-threat-chip critical">🔴 ${threats.critical} Critical</span>`;
+  html += `<span class="comp-threat-chip high">🟠 ${threats.high} High</span>`;
+  html += `<span class="comp-threat-chip medium">🟡 ${threats.medium} Medium</span>`;
+  html += `</div>`;
+
+  // Market context
+  html += `<div class="comp-market-context">`;
+  html += `<span>Market: <strong>${ctx.totalMarket}</strong></span>`;
+  html += `<span>NA Share: <strong>${ctx.naShare}</strong></span>`;
+  html += `<span>BambooHR: <strong>${ctx.bamboohrRevenue}</strong></span>`;
+  html += `<span>Segment: <strong>${ctx.bamboohrSegment}</strong></span>`;
+  html += `</div>`;
+
+  // Competitor cards
+  html += `<div class="comp-grid">`;
+  for (const comp of sorted) {
+    const initial = comp.name.charAt(0);
+    const isCritical = comp.threatLevel === 'CRITICAL';
+    const tags = [];
+    if (comp.nativePayroll) tags.push({ label: 'Payroll', cls: 'yes' });
+    else tags.push({ label: 'No Payroll', cls: 'no' });
+    if (comp.itManagement) tags.push({ label: 'IT Mgmt', cls: 'yes' });
+    if (comp.spendManagement) tags.push({ label: 'Spend Mgmt', cls: 'yes' });
+
+    // Get news for this competitor
+    const newsItems = newsData && newsData.competitors ? (newsData.competitors[comp.name] || []) : [];
+
+    html += `<div class="comp-card${isCritical ? ' critical' : ''}" onclick="this.classList.toggle('expanded')">`;
+    html += `<div class="comp-card-header">`;
+    html += `<img class="comp-logo" src="${comp.logo}" alt="${comp.name}" onerror="this.outerHTML='<div class=\\'comp-logo-placeholder\\'>${initial}</div>'">`;
+    html += `<div class="comp-name-row">`;
+    html += `<div class="comp-name">${comp.name} <span class="comp-threat-badge ${comp.threatLevel.toLowerCase()}">${comp.threatLevel}</span></div>`;
+    html += `<div class="comp-category">${comp.category} · ${comp.targetSegment}</div>`;
+    html += `</div>`;
+    html += `</div>`;
+
+    html += `<div class="comp-stats">`;
+    html += `<span>💰 ${comp.revenue}</span>`;
+    html += `<span>📅 ${comp.founded}</span>`;
+    html += `<span>📍 ${comp.hq}</span>`;
+    html += `<span>👥 ${comp.employees}</span>`;
+    html += `</div>`;
+
+    html += `<div class="comp-tags">`;
+    for (const tag of tags) {
+      html += `<span class="comp-tag ${tag.cls}">${tag.label}</span>`;
+    }
+    html += `</div>`;
+
+    // News headlines
+    if (newsItems.length > 0) {
+      html += `<div class="comp-news-section">`;
+      html += `<div class="comp-news-label">Recent News</div>`;
+      for (const item of newsItems.slice(0, 3)) {
+        const title = item.title.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+        html += `<div class="comp-news-item"><a href="${item.link}" target="_blank" onclick="event.stopPropagation()">${title}</a></div>`;
+      }
+      html += `</div>`;
+    }
+
+    html += `<div class="comp-expand-hint"></div>`;
+
+    // Expanded details
+    html += `<div class="comp-threat-analysis">`;
+    html += `<div class="comp-section-title strengths">Key Strengths</div>`;
+    html += `<ul class="comp-detail-list">`;
+    for (const s of comp.keyStrengths.slice(0, 3)) {
+      html += `<li>${s}</li>`;
+    }
+    html += `</ul>`;
+
+    html += `<div class="comp-section-title weaknesses">Key Weaknesses</div>`;
+    html += `<ul class="comp-detail-list">`;
+    for (const w of comp.keyWeaknesses.slice(0, 3)) {
+      html += `<li>${w}</li>`;
+    }
+    html += `</ul>`;
+
+    html += `<div class="comp-section-title">Threat Analysis</div>`;
+    html += `<p style="font-size:12px;color:var(--text-dim);line-height:1.5;margin:0">${comp.threatAnalysis}</p>`;
+    html += `</div>`;
+
+    html += `</div>`;
+  }
+  html += `</div>`;
+
+  return html;
+}
+
+async function renderCuratedDigest() {
+  try {
+    const resp = await fetch('/api/curated-digest');
+    if (!resp.ok) throw new Error('Failed to load curated digest');
+    const data = await resp.json();
+    
+    if (!data.categories || Object.keys(data.categories).length === 0) {
+      return '<div class="empty-state"><div class="icon">📭</div>No curated data yet</div>';
+    }
+    
+    let html = `<div class="curated-digest">`;
+    html += `<div class="digest-header"><h3>📡 Your Research Digest</h3><span class="digest-meta">${data.filtered_items} items from ${data.total_items} total</span></div>`;
+    
+    for (const [catKey, catData] of Object.entries(data.categories)) {
+      html += `<div class="digest-category"><h4>${catData.label} (${catData.count})</h4><ul>`;
+      for (const item of catData.items) {
+        html += `<li><a href="${item.url}" target="_blank" rel="noopener">${item.title}</a> <span class="item-source">(${item.source})</span></li>`;
+      }
+      html += `</ul></div>`;
+    }
+    
+    html += `</div>`;
+    return html;
+  } catch (e) {
+    return `<div class="empty-state"><div class="icon">⚠️</div>Error loading curated digest: ${e.message}</div>`;
+  }
+}
+
+async function render() {
+  updateClock();
+
+  const cards = document.getElementById('grid');
+  const summary = document.getElementById('summary-bar');
+  cards.innerHTML = '';
+  summary.innerHTML = '';
+
+  let totalJobs = JOB_CONFIGS.length;
+  let activeJobs = 0;
+
+  // Load competitor data once
+  const compData = await loadCompetitorData();
+
+  for (const config of JOB_CONFIGS) {
+    const data = await loadJob(config.id);
+
+    if (data && data.content) activeJobs++;
+
+    const status = data && data.content ? freshness(data.timestamp) : 'empty';
+    const badgeClass = status === 'fresh' ? 'badge-fresh' : status === 'stale' ? 'badge-stale' : 'badge-empty';
+
+    const card = document.createElement('div');
+    card.className = 'card';
+
+    let bodyContent;
+    if (config.id === 'competitors') {
+      bodyContent = await renderCompetitorCard(data, compData);
+    } else if (config.id === 'research-digest') {
+      bodyContent = await renderCuratedDigest();
+    } else {
+      bodyContent = data && data.content
+        ? data.content
+        : '<div class="empty-state"><div class="icon">📭</div>No data yet — waiting for first run</div>';
+    }
+
+    card.innerHTML = `
+      <div class="card-header">
+        <div class="card-title">
+          <span class="icon">${config.icon}</span>
+          ${config.name}
+        </div>
+        <span class="card-badge ${badgeClass}">${freshnessLabel(status)}</span>
+      </div>
+      <div class="card-body${config.id === 'competitors' ? ' tall' : ''}">
+        ${bodyContent}
+      </div>
+      <div class="card-footer">
+        <span>${config.freq}</span>
+        <span>${data && data.timestamp ? 'Last: ' + timeAgo(data.timestamp) : 'Never run'}</span>
+      </div>
+    `;
+    cards.appendChild(card);
+  }
+
+  summary.innerHTML = `
+    <div class="summary-chip"><span class="count">${activeJobs}</span> / ${totalJobs} active</div>
+    <div class="summary-chip"><span class="count">${totalJobs - activeJobs}</span> waiting for data</div>
+  `;
+}
+
+// Clock update
+setInterval(updateClock, 1000);
+updateClock();
+
+// Auto-refresh every 60s
+setInterval(render, 60000);
+
+// Initial render
+render();
+</script>
+</body>
+</html>

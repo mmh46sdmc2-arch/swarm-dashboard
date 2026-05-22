@@ -1,0 +1,418 @@
+{
+  "lastUpdated": "2026-05-22T12:00:00Z",
+  "marketContext": {
+    "totalMarket": "$35.3B global HR/payroll software (2024)",
+    "naShare": "$12.79B North America (36.28%)",
+    "bamboohrRevenue": "~$300M",
+    "bamboohrSegment": "SMB (10-250 employees)",
+    "bamboohrWeakness": "No native payroll outside US"
+  },
+  "threatSummary": {
+    "critical": 1,
+    "high": 2,
+    "medium": 7
+  },
+  "competitors": [
+    {
+      "name": "Rippling",
+      "logo": "/data/logos/rippling.svg",
+      "threatLevel": "CRITICAL",
+      "color": "#ff4444",
+      "category": "Mid-Market Unified Platform",
+      "revenue": "$500-800M (2024 est.)",
+      "valuation": "$16.5B",
+      "founded": 2016,
+      "hq": "San Francisco, CA",
+      "employees": "~2,000+",
+      "targetSegment": "SMB → Mid-Market (10-1,000)",
+      "nativePayroll": true,
+      "itManagement": true,
+      "spendManagement": true,
+      "keyStrengths": [
+        "Unified Platform: HR + Payroll + IT + Finance in one system",
+        "Employee Graph: Centralized data model syncs across all apps",
+        "90-second onboarding: Automated provisioning across all systems",
+        "Dynamic reporting: Filter by any field in the system",
+        "Open API: Data-first philosophy with powerful sync capabilities"
+      ],
+      "keyWeaknesses": [
+        "Complexity: Overwhelming feature set for simple use cases",
+        "Support: Slow response times, less personalized than BambooHR",
+        "Price creep: Costs increase as more products are added",
+        "Maturity: Younger company (2016) vs BambooHR (2008)",
+        "Enterprise gaps: Not scalable for 1,000+ employees"
+      ],
+      "strategicMoves": [
+        "Aggressive Rippling App Store expansion",
+        "Native Finance Cloud products (spend management, corporate cards)",
+        "International expansion: EOR in 150+ countries",
+        "Preparing for IPO (expected 2026-2027)"
+      ],
+      "customerSentiment": {
+        "praise": "\"The automation is insane,\" exceptional reporting, unified platform, fast onboarding",
+        "complaints": "Support response times slow, price-creeping, can be overwhelming"
+      },
+      "threatAnalysis": "Direct replacement for growth-stage companies. Bundled value proposition (HR + IT + Payroll + Finance) leaves BambooHR's specialized feature set looking dated. Employee Graph data model is a structural advantage BambooHR cannot easily replicate."
+    },
+    {
+      "name": "Gusto",
+      "logo": "/data/logos/gusto.svg",
+      "threatLevel": "HIGH",
+      "color": "#ff8800",
+      "category": "SMB Payroll + HR",
+      "revenue": "$400M+ (est.)",
+      "founded": 2011,
+      "hq": "San Francisco, CA",
+      "employees": "~1,500",
+      "targetSegment": "SMB (1-100 employees)",
+      "nativePayroll": true,
+      "itManagement": false,
+      "spendManagement": false,
+      "keyStrengths": [
+        "Best-in-class UX for small business payroll",
+        "Automated tax filing and compliance",
+        "Beautiful, intuitive interface",
+        "Strong customer support reputation",
+        "Benefits administration built-in"
+      ],
+      "keyWeaknesses": [
+        "Limited to smaller businesses (under 100-150 employees)",
+        "Less robust HRIS features compared to BambooHR",
+        "No IT or spend management capabilities",
+        "Limited customization for complex org structures",
+        "Pricing increases significantly at scale"
+      ],
+      "strategicMoves": [
+        "Expanding into mid-market segment",
+        "Enhanced benefits marketplace",
+        "AI-powered payroll insights",
+        "International expansion (Canada, UK)"
+      ],
+      "customerSentiment": {
+        "praise": "Easiest payroll to use, great support, beautiful UI, automated compliance",
+        "complaints": "Gets expensive at scale, limited HR features, not for complex orgs"
+      },
+      "threatAnalysis": "Direct competitor in the SMB segment. Gusto's payroll strength + improving HR features makes it a natural choice for companies that prioritize payroll simplicity. Threat is highest for BambooHR customers under 100 employees who need native payroll."
+    },
+    {
+      "name": "Workday",
+      "logo": "/data/logos/workday.png",
+      "threatLevel": "HIGH",
+      "color": "#ff8800",
+      "category": "Enterprise HCM",
+      "revenue": "$7.8B (FY2024)",
+      "founded": 2005,
+      "hq": "Pleasanton, CA",
+      "employees": "~19,000",
+      "targetSegment": "Large Enterprise (500+)",
+      "nativePayroll": true,
+      "itManagement": false,
+      "spendManagement": false,
+      "keyStrengths": [
+        "Single-platform architecture: HR + Financials + Analytics",
+        "Enterprise workflow depth and configurability",
+        "AI-driven workforce analytics and talent management",
+        "Global compliance: Multi-country payroll and benefits",
+        "Extensive partner implementation ecosystem"
+      ],
+      "keyWeaknesses": [
+        "Prohibitive cost: $500K-2M+ implementation, $100K-500K+/yr licenses",
+        "Long implementation: Months to years vs BambooHR's days/weeks",
+        "Over-complexity for SMBs: Unnecessarily complex under 500 employees",
+        "Third-party implementations: Inconsistent quality",
+        "No SMB focus: Actively avoids <500 employee segment"
+      ],
+      "strategicMoves": [
+        "Adjusted pricing and implementation models for mid-market (2024-2025)",
+        "Expanded AI and ML features for talent management",
+        "Enhanced accessibility and UX improvements",
+        "Growing partner ecosystem for mid-market implementations"
+      ],
+      "customerSentiment": {
+        "praise": "Powerful analytics, scalability, configurability, single-platform architecture",
+        "complaints": "Extremely expensive, complex implementation, over-engineered for smaller teams, slow feature releases"
+      },
+      "threatAnalysis": "Irrelevant to BambooHR's core SMB customer base. Companies ready for Workday have already passed BambooHR's ceiling. The only overlap is for BambooHR customers who scale past 500 employees — but even then, Workday is one of many enterprise options."
+    },
+    {
+      "name": "Personio",
+      "logo": "/data/logos/personio.png",
+      "threatLevel": "MEDIUM",
+      "color": "#aaaaaa",
+      "category": "EU Mid-Market",
+      "revenue": "€200M+ (est.)",
+      "founded": 2015,
+      "hq": "Munich, Germany",
+      "employees": "~1,500",
+      "targetSegment": "EU Mid-Market (50-500)",
+      "nativePayroll": true,
+      "itManagement": false,
+      "spendManagement": false,
+      "keyStrengths": [
+        "Best-in-class EU compliance and GDPR",
+        "Strong UX for European markets",
+        "All-in-one HRIS with payroll in multiple EU countries",
+        "Rapid growth and strong funding",
+        "Local language support across 20+ EU countries"
+      ],
+      "keyWeaknesses": [
+        "Limited presence outside Europe",
+        "Younger company with less proven long-term stability",
+        "Smaller feature set than BambooHR in some areas",
+        "Limited US market awareness",
+        "Smaller integration ecosystem"
+      ],
+      "strategicMoves": [
+        "Expanding into new EU markets",
+        "Enhanced analytics and reporting",
+        "AI-powered HR insights",
+        "US market entry attempts"
+      ],
+      "customerSentiment": {
+        "praise": "Great EU compliance, intuitive interface, strong local support, good value",
+        "complaints": "Limited outside EU, smaller feature set, growing pains"
+      },
+      "threatAnalysis": "Primary threat for BambooHR's European expansion. If BambooHR tries to grow in EU markets, Personio is the dominant local player with superior compliance and localization."
+    },
+    {
+      "name": "HiBob",
+      "logo": "/data/logos/hibob.png",
+      "threatLevel": "MEDIUM",
+      "color": "#aaaaaa",
+      "category": "Tech Mid-Market",
+      "revenue": "$200M+ (est.)",
+      "founded": 2015,
+      "hq": "New York, NY / Tel Aviv, Israel",
+      "employees": "~1,000",
+      "targetSegment": "Tech Mid-Market (200-2,000)",
+      "nativePayroll": false,
+      "itManagement": false,
+      "spendManagement": false,
+      "keyStrengths": [
+        "Strong brand and culture focus",
+        "Modern, visually appealing interface",
+        "Strong in tech and startup segments",
+        "Good talent management and performance tools",
+        "Flexible and customizable"
+      ],
+      "keyWeaknesses": [
+        "Limited payroll capabilities",
+        "Less mature than BambooHR in core HR",
+        "Financial instability concerns (public company)",
+        "Smaller integration ecosystem",
+        "Less proven in non-tech industries"
+      ],
+      "strategicMoves": [
+        "Expanding payroll capabilities",
+        "Enhanced analytics and reporting",
+        "AI-powered people insights",
+        "International expansion"
+      ],
+      "customerSentiment": {
+        "praise": "Beautiful UI, great for culture-focused companies, flexible, good talent tools",
+        "complaints": "Payroll gaps, financial concerns, less mature in core HR, smaller ecosystem"
+      },
+      "threatAnalysis": "Competes for tech-savvy mid-market companies. HiBob's brand appeal and culture focus makes it attractive to the same demographic as BambooHR, but its financial instability and payroll gaps limit the threat."
+    },
+    {
+      "name": "UKG",
+      "logo": "/data/logos/ukg.svg",
+      "threatLevel": "MEDIUM",
+      "color": "#aaaaaa",
+      "category": "Enterprise Workforce",
+      "revenue": "$3.5B+ (combined UKG Pro + UKG Ready)",
+      "founded": "2020 (UKG merger)",
+      "hq": "Charlotte, NC",
+      "employees": "~20,000",
+      "targetSegment": "Enterprise (500+)",
+      "nativePayroll": true,
+      "itManagement": false,
+      "spendManagement": false,
+      "keyStrengths": [
+        "Deep workforce management capabilities",
+        "Strong in hourly and shift-based industries",
+        "Global payroll and compliance",
+        "Large enterprise customer base",
+        "Combined UKG Pro + UKG Ready platform"
+      ],
+      "keyWeaknesses": [
+        "Complex and clunky interface",
+        "Long implementation timelines",
+        "Expensive for mid-market",
+        "Less intuitive than BambooHR",
+        "Legacy system baggage from Kronos merger"
+      ],
+      "strategicMoves": [
+        "AI-powered workforce optimization",
+        "Enhanced mobile capabilities",
+        "Cloud-first strategy",
+        "Industry-specific solutions"
+      ],
+      "customerSentiment": {
+        "praise": "Deep workforce management, global payroll, strong in hourly industries",
+        "complaints": "Clunky UI, complex implementation, expensive, steep learning curve"
+      },
+      "threatAnalysis": "Lower threat to BambooHR's core SMB segment but a major hurdle for BambooHR's up-market expansion. Formidable in industries with complex workforce management needs (healthcare, manufacturing, retail)."
+    },
+    {
+      "name": "ADP",
+      "logo": "/data/logos/adp.png",
+      "threatLevel": "MEDIUM",
+      "color": "#aaaaaa",
+      "category": "Enterprise Payroll + HR",
+      "revenue": "$20.6B (FY2025)",
+      "founded": 1949,
+      "hq": "Roseland, NJ",
+      "employees": "~67,000",
+      "targetSegment": "Micro → Global Enterprise",
+      "nativePayroll": true,
+      "itManagement": false,
+      "spendManagement": false,
+      "keyStrengths": [
+        "Unmatched scale: 1.1M companies, 140 countries, 42M+ workers",
+        "Full-stack payroll: Native automation from micro to enterprise",
+        "Global compliance: 200+ countries payroll and tax filing",
+        "Financial stability: $20.6B revenue, $4B+ net income",
+        "Massive partner ecosystem and integrations"
+      ],
+      "keyWeaknesses": [
+        "Legacy UX: Clunky, complex, one-size-fits-many interface",
+        "Implementation complexity: Weeks to months vs BambooHR's days/weeks",
+        "SMB experience gap: BambooHR's tailored SMB experience is superior",
+        "Customer service: Slow and impersonal vs BambooHR's personable support",
+        "Workflow rigidity: Clients adapt to ADP, not vice versa"
+      ],
+      "strategicMoves": [
+        "Mobile and interface modernization (2023-2024)",
+        "AI-powered payroll and compliance tools",
+        "Enhanced mobile capabilities",
+        "Acquired WorkMarket (2018) for freelancer management"
+      ],
+      "customerSentiment": {
+        "praise": "Payroll accuracy, compliance expertise, global reach, reliability",
+        "complaints": "Clunky interface, slow customer service, complex implementation, rigid workflows"
+      },
+      "threatAnalysis": "ADP's RUN platform directly targets smaller businesses, but complexity and pricing make it less relevant for BambooHR's core SMB segment. Primary threat is for BambooHR customers who outgrow BambooHR and need native payroll — ADP is the default upgrade path."
+    },
+    {
+      "name": "SAP SuccessFactors",
+      "logo": "/data/logos/sap.png",
+      "threatLevel": "MEDIUM",
+      "color": "#aaaaaa",
+      "category": "Enterprise HCM",
+      "revenue": "Part of SAP $32B+ ERP suite",
+      "founded": "2001 (acquired by SAP 2011)",
+      "hq": "Walldorf, Germany",
+      "employees": "~110,000 (SAP total)",
+      "targetSegment": "Large Enterprise (1,000+)",
+      "nativePayroll": false,
+      "itManagement": false,
+      "spendManagement": false,
+      "keyStrengths": [
+        "Deep ERP integration with SAP S/4HANA",
+        "Enterprise-grade analytics and reporting",
+        "Global compliance and multi-country support",
+        "Strong talent management and learning modules",
+        "Massive enterprise customer base"
+      ],
+      "keyWeaknesses": [
+        "Extremely expensive and complex",
+        "Long implementation (6-18 months)",
+        "Over-engineered for SMBs",
+        "Requires SAP ecosystem commitment",
+        "Poor UX compared to modern HRIS"
+      ],
+      "strategicMoves": [
+        "AI-powered people analytics (Joule AI)",
+        "Enhanced mobile experience",
+        "Industry-specific solutions",
+        "Integration with SAP Business AI"
+      ],
+      "customerSentiment": {
+        "praise": "Deep ERP integration, powerful analytics, global compliance, enterprise scale",
+        "complaints": "Extremely expensive, complex, poor UX, requires SAP commitment, long implementation"
+      },
+      "threatAnalysis": "Irrelevant to BambooHR's core segment. Only relevant if BambooHR customers scale to enterprise level and are already in the SAP ecosystem. Low direct threat."
+    },
+    {
+      "name": "Oracle HCM Cloud",
+      "logo": "/data/logos/oracle.png",
+      "threatLevel": "MEDIUM",
+      "color": "#aaaaaa",
+      "category": "Enterprise HCM",
+      "revenue": "Part of Oracle $50B+ cloud suite",
+      "founded": "1977 (HCM Cloud launched 2017)",
+      "hq": "Austin, TX",
+      "employees": "~140,000 (Oracle total)",
+      "targetSegment": "Large Enterprise (1,000+)",
+      "nativePayroll": true,
+      "itManagement": false,
+      "spendManagement": false,
+      "keyStrengths": [
+        "Deep ERP and database integration",
+        "AI-powered HCM (Oracle AI Assistant)",
+        "Global payroll and compliance",
+        "Strong talent management and analytics",
+        "Enterprise-grade security and scalability"
+      ],
+      "keyWeaknesses": [
+        "Extremely expensive and complex",
+        "Long implementation timelines",
+        "Over-engineered for SMBs",
+        "Requires Oracle ecosystem commitment",
+        "Poor UX compared to modern HRIS"
+      ],
+      "strategicMoves": [
+        "AI-powered HCM features (Oracle AI Assistant)",
+        "Enhanced mobile experience",
+        "Industry-specific solutions",
+        "Integration with Oracle Fusion Cloud"
+      ],
+      "customerSentiment": {
+        "praise": "Powerful analytics, deep ERP integration, global compliance, enterprise scale",
+        "complaints": "Extremely expensive, complex, poor UX, requires Oracle commitment, long implementation"
+      },
+      "threatAnalysis": "Irrelevant to BambooHR's core segment. Only relevant for enterprise-scale customers already in the Oracle ecosystem. Low direct threat."
+    },
+    {
+      "name": "Deel",
+      "logo": "/data/logos/deel.png",
+      "threatLevel": "MEDIUM",
+      "color": "#aaaaaa",
+      "category": "Global Contractor + EOR",
+      "revenue": "$500M+ (est.)",
+      "founded": 2019,
+      "hq": "San Francisco, CA",
+      "employees": "~2,000+",
+      "targetSegment": "Global Remote Teams (any size)",
+      "nativePayroll": true,
+      "itManagement": false,
+      "spendManagement": false,
+      "keyStrengths": [
+        "Hire anyone in 150+ countries instantly",
+        "Built-in compliance and legal entity management",
+        "Fastest global payroll processing",
+        "Strong contractor management capabilities",
+        "Modern, developer-friendly platform"
+      ],
+      "keyWeaknesses": [
+        "Limited core HRIS features compared to BambooHR",
+        "Less mature in talent management",
+        "Smaller integration ecosystem",
+        "Pricing can be high for small teams",
+        "Younger company with less proven stability"
+      ],
+      "strategicMoves": [
+        "Expanding into full HRIS platform",
+        "Enhanced benefits and compensation tools",
+        "AI-powered global compliance",
+        "Building out core HR features"
+      ],
+      "customerSentiment": {
+        "praise": "Fastest global hiring, excellent compliance, developer-friendly, great UX",
+        "complaints": "Limited core HR features, expensive for small teams, growing pains"
+      },
+      "threatAnalysis": "Growing threat as Deel expands from EOR/contractor platform into full HRIS. If BambooHR customers have significant global/remote workforce needs, Deel becomes a compelling alternative. Threat increases as Deel builds out core HR features."
+    }
+  ]
+}

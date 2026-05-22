@@ -1,0 +1,27 @@
+{
+  "positive": [
+    { "day": 20, "signal": "GL U sanctions waiver" },
+    { "day": 23, "signal": "Trump extended deadline x2 (chose talk over strike)" },
+    { "day": 25, "signal": "Vance confirmed lead negotiator" },
+    { "day": 25, "signal": "Iran allowing select ships through Hormuz" },
+    { "day": 26, "signal": "Vance chided Netanyahu — pushed back on war aims" },
+    { "day": 27, "signal": "Pakistan confirmed as mediator" },
+    { "day": 27, "signal": "Pakistan bilateral Hormuz deal (2 ships/day)" },
+    { "day": 27, "signal": "Turkey + Egypt supporting mediation" },
+    { "day": 27, "signal": "Iran humanitarian Hormuz corridor" },
+    { "day": 27, "signal": "Iran counter-proposal submitted" },
+    { "day": 27, "signal": "Rubio: without ground troops" },
+    { "day": 28, "signal": "Vance: vast majority accomplished (exit narrative)" },
+    { "day": 28, "signal": "IDF: military industry targets nearly complete" },
+    { "day": 28, "signal": "CPAC split signals domestic exit pressure" },
+    { "day": 29, "signal": "Islamabad 4-nation summit (Pak/Tur/Egy/KSA)" },
+    { "day": 29, "signal": "UK sending mine-clearing ship to Hormuz" },
+    { "day": 30, "signal": "Pakistan offers to host US-Iran talks in coming days" },
+    { "day": 30, "signal": "IDF: days away from all top-priority targets" },
+    { "day": 31, "signal": "Trump: Iran agreed to 'most of' 15-point US demands — most concrete diplomatic claim yet" },
+    { "day": 31, "signal": "First Chinese container vessel transited Hormuz since war began" },
+    { "day": 31, "signal": "IRGC university deadline expired without strikes — de-escalation window" }
+  ],
+  "negative_count": 57,
+  "last_updated": "2026-04-01"
+}
