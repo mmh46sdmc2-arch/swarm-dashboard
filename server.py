@@ -42,6 +42,8 @@ class DashboardHandler(http.server.SimpleHTTPRequestHandler):
             self.serve_logo(self.path)
         elif self.path == '/api/status':
             self.serve_status()
+        elif self.path == '/api/health':
+            self.serve_health()
         else:
             super().do_GET()
 
@@ -108,6 +110,23 @@ class DashboardHandler(http.server.SimpleHTTPRequestHandler):
             else:
                 status[key] = {'exists': False}
         self.send_json(200, status)
+
+    def serve_health(self):
+        """Serve the health status JSON written by heartbeat.py."""
+        health_file = DATA_DIR / 'health-status.json'
+        if not health_file.exists():
+            self.send_json(503, {
+                'overall': 'unknown',
+                'error': 'No health data yet — heartbeat has not run',
+                'timestamp': None,
+            })
+            return
+        try:
+            data = json.loads(health_file.read_text(encoding='utf-8'))
+        except Exception as e:
+            self.send_json(500, {'error': f'Could not parse health data: {e}'})
+            return
+        self.send_json(200, data)
 
     def serve_competitors_data(self):
         filepath = DATA_DIR / 'competitors-data.json'
@@ -208,7 +227,7 @@ class DashboardHandler(http.server.SimpleHTTPRequestHandler):
 if __name__ == '__main__':
     port = int(sys.argv[1]) if len(sys.argv) > 1 else 8765
     DATA_DIR.mkdir(parents=True, exist_ok=True)
-    server = http.server.HTTPServer(('127.0.0.1', port), DashboardHandler)
+    server = http.server.HTTPServer(('0.0.0.0', port), DashboardHandler)
     print(f'📊 Swarm Dashboard → http://127.0.0.1:{port}')
     print(f'   Data dir: {DATA_DIR}')
     print(f'   Press Ctrl+C to stop\n')

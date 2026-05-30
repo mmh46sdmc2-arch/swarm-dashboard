@@ -1,0 +1,128 @@
+{
+  "timestamp": "2026-05-30T20:30:14.864611+00:00",
+  "epoch": 1780173014,
+  "overall": "critical",
+  "issues": [
+    "FAILED: Weekly Grocery Differential",
+    "FAILED: Daily Research Topics — 5 Topics to Explore",
+    "DOWN: Hermes Gateway (Orchestrator)",
+    "DOWN: Grocery Capture",
+    "UNREACHABLE: Swarm Dashboard"
+  ],
+  "cron_jobs": {
+    "a01b5d3ad0cf": {
+      "name": "Research Digest — Daily",
+      "enabled": true,
+      "last_status": "ok",
+      "last_run": "2026-05-30T07:03:03.066059-07:00",
+      "next_run": "2026-05-31T07:00:00-07:00",
+      "schedule": "0 7 * * *"
+    },
+    "aba22b44b38c": {
+      "name": "Polymarket Monitor",
+      "enabled": true,
+      "last_status": "ok",
+      "last_run": "2026-05-30T11:18:37.503526-07:00",
+      "next_run": "2026-05-30T15:18:37.503526-07:00",
+      "schedule": "every 240m"
+    },
+    "3c33eb37be9e": {
+      "name": "Hacker News Top Stories",
+      "enabled": true,
+      "last_status": "ok",
+      "last_run": "2026-05-30T12:09:09.648752-07:00",
+      "next_run": "2026-05-30T15:09:09.648752-07:00",
+      "schedule": "every 180m"
+    },
+    "26cdd7120452": {
+      "name": "Grocery Capture Failure Alert",
+      "enabled": true,
+      "last_status": "ok",
+      "last_run": "2026-05-30T07:00:43.504052-07:00",
+      "next_run": "2026-05-31T07:00:00-07:00",
+      "schedule": "0 7 * * *"
+    },
+    "58fe1ed8bde0": {
+      "name": "Weekly Grocery Differential",
+      "enabled": true,
+      "last_status": "error",
+      "last_run": "2026-05-30T03:13:09.676137-07:00",
+      "next_run": "2026-05-31T11:00:00-07:00",
+      "schedule": "0 11 * * 0"
+    },
+    "7368fd7e9303": {
+      "name": "Grocery Capture Self-Heal Monitor",
+      "enabled": true,
+      "last_status": "ok",
+      "last_run": "2026-05-30T08:20:49.308749-07:00",
+      "next_run": "2026-05-31T06:30:00-07:00",
+      "schedule": "30 6 * * *"
+    },
+    "6a9bb079e873": {
+      "name": "Weekly Grocery Trend Analysis",
+      "enabled": true,
+      "last_status": null,
+      "last_run": null,
+      "next_run": "2026-05-31T10:00:00-07:00",
+      "schedule": "0 10 * * 0"
+    },
+    "1927dbd91447": {
+      "name": "Daily Research Topics — 5 Topics to Explore",
+      "enabled": true,
+      "last_status": "error",
+      "last_run": "2026-05-30T10:34:46.193674-07:00",
+      "next_run": "2026-05-31T10:30:00-07:00",
+      "schedule": "30 10 * * *"
+    },
+    "5c1b2f91ecdc": {
+      "name": "Swarm Health Heartbeat",
+      "enabled": true,
+      "last_status": null,
+      "last_run": null,
+      "next_run": "2026-05-30T13:47:46.479230-07:00",
+      "schedule": "every 30m"
+    }
+  },
+  "launch_agents": [
+    {
+      "label": "ai.hermes.gateway-implementor",
+      "name": "Hermes Gateway (Implementor)",
+      "running": true,
+      "pid": 14723,
+      "loaded": true
+    },
+    {
+      "label": "ai.hermes.gateway",
+      "name": "Hermes Gateway (Orchestrator)",
+      "running": false,
+      "pid": null,
+      "loaded": false
+    },
+    {
+      "label": "com.joshswarm.grocery-capture",
+      "name": "Grocery Capture",
+      "running": false,
+      "pid": null,
+      "loaded": true
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "Swarm Dashboard",
+      "url": "http://127.0.0.1:8765/api/status",
+      "reachable": false,
+      "error": "<urlopen error [Errno 61] Connection refused>"
+    }
+  ],
+  "anomalies": [],
+  "summary": {
+    "total_cron": 9,
+    "healthy_cron": 5,
+    "failed_cron": 2,
+    "running_agents": 1,
+    "total_agents": 3,
+    "reachable_endpoints": 0,
+    "total_endpoints": 1,
+    "anomaly_count": 0
+  }
+}

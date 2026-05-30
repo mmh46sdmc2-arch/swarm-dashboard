@@ -622,6 +622,162 @@
     .summary-bar { padding: 16px; flex-wrap: wrap; }
     .comp-market-context { flex-direction: column; gap: 8px; }
   }
+
+  /* ── Health Tile Styles ── */
+  .health-overall {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .health-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .health-dot.healthy { background: var(--green); box-shadow: 0 0 12px rgba(0,210,160,0.4); }
+  .health-dot.degraded { background: var(--orange); box-shadow: 0 0 12px rgba(240,160,80,0.4); }
+  .health-dot.critical { background: var(--red); box-shadow: 0 0 12px rgba(255,107,107,0.4); animation: pulse 1s ease-in-out infinite; }
+  .health-dot.unknown { background: var(--text-dim); }
+
+  .health-title {
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .health-title .status-text {
+    text-transform: uppercase;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    margin-left: 8px;
+  }
+
+  .health-title .status-text.healthy { color: var(--green); }
+  .health-title .status-text.degraded { color: var(--orange); }
+  .health-title .status-text.critical { color: var(--red); }
+  .health-title .status-text.unknown { color: var(--text-dim); }
+
+  .health-stats {
+    display: flex;
+    gap: 16px;
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--text-dim);
+    flex-wrap: wrap;
+  }
+
+  .health-stat {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .health-stat .stat-value {
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .health-stat .stat-value.good { color: var(--green); }
+  .health-stat .stat-value.bad { color: var(--red); }
+  .health-stat .stat-value.warn { color: var(--orange); }
+
+  .health-issues {
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .health-issues-title {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+  }
+
+  .health-issue {
+    font-size: 12px;
+    padding: 4px 0;
+    padding-left: 14px;
+    position: relative;
+    color: var(--text);
+    line-height: 1.4;
+  }
+
+  .health-issue::before {
+    content: '⚠';
+    position: absolute;
+    left: 0;
+    font-size: 10px;
+  }
+
+  .health-issue.critical::before { content: '🔴'; }
+  .health-issue.degraded::before { content: '🟡'; }
+
+  .health-cron-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 8px;
+    padding: 12px 20px;
+  }
+
+  .health-cron-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    background: var(--surface2);
+    border-radius: 6px;
+    font-size: 12px;
+    border: 1px solid transparent;
+  }
+
+  .health-cron-item.ok { border-color: rgba(0,210,160,0.2); }
+  .health-cron-item.error { border-color: rgba(255,107,107,0.3); background: rgba(255,107,107,0.05); }
+  .health-cron-item.never { border-color: rgba(136,136,160,0.2); }
+
+  .health-cron-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .health-cron-dot.ok { background: var(--green); }
+  .health-cron-dot.error { background: var(--red); }
+  .health-cron-dot.never { background: var(--text-dim); }
+
+  .health-cron-name {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .health-cron-time {
+    color: var(--text-dim);
+    font-size: 11px;
+    flex-shrink: 0;
+  }
+
+  .health-empty {
+    text-align: center;
+    padding: 32px 20px;
+    color: var(--text-dim);
+    font-size: 13px;
+  }
+
+  .health-empty .icon {
+    font-size: 28px;
+    margin-bottom: 8px;
+  }
 </style>
 </head>
 <body>
@@ -907,7 +1063,6 @@ async function renderHNCard() {
     html += '<ul class="hn-list">';
     
     for (const line of lines) {
-      // Match numbered items: 1. **Title** — X pts, Y comments — [link](url) — description
       const match = line.match(/^\d+\.\s+\*\*(.+?)\*\*\s+—\s+\d+\s+pts,\s+\d+\s+comments\s+—\s+\[(.+?)\]\((.+?)\)\s+—\s+(.+)$/);
       if (match) {
         const [, title, linkText, url, description] = match;
@@ -922,6 +1077,85 @@ async function renderHNCard() {
   }
 }
 
+async function renderHealthTile() {
+  try {
+    const resp = await fetch('/api/health');
+    if (!resp.ok) {
+      const err = await resp.json().catch(() => ({}));
+      return `<div class="health-empty"><div class="icon">🔍</div>${err.error || 'Health data not yet available'}</div>`;
+    }
+    const data = await resp.json();
+    
+    const overall = data.overall || 'unknown';
+    const statusClass = overall; // healthy, degraded, critical, unknown
+    const statusLabel = overall.charAt(0).toUpperCase() + overall.slice(1);
+    
+    let html = `<div class="health-overall">`;
+    html += `<div class="health-dot ${statusClass}"></div>`;
+    html += `<div class="health-title">Swarm Health <span class="status-text ${statusClass}">${statusLabel}</span></div>`;
+    html += `</div>`;
+    
+    // Stats row
+    const s = data.summary || {};
+    html += `<div class="health-stats">`;
+    html += `<div class="health-stat">Cron: <span class="stat-value ${s.failed_cron > 0 ? 'bad' : 'good'}">${s.healthy_cron || 0}/${s.total_cron || 0}</span></div>`;
+    html += `<div class="health-stat">Agents: <span class="stat-value ${s.running_agents < s.total_agents ? 'warn' : 'good'}">${s.running_agents || 0}/${s.total_agents || 0}</span></div>`;
+    html += `<div class="health-stat">Endpoints: <span class="stat-value ${s.reachable_endpoints < s.total_endpoints ? 'bad' : 'good'}">${s.reachable_endpoints || 0}/${s.total_endpoints || 0}</span></div>`;
+    html += `<div class="health-stat">Anomalies: <span class="stat-value ${s.anomaly_count > 0 ? 'bad' : 'good'}">${s.anomaly_count || 0}</span></div>`;
+    html += `<div class="health-stat">Updated: <span class="stat-value">${data.timestamp ? new Date(data.timestamp).toLocaleTimeString() : '—'}</span></div>`;
+    html += `</div>`;
+    
+    // Issues
+    if (data.issues && data.issues.length > 0) {
+      html += `<div class="health-issues">`;
+      html += `<div class="health-issues-title">Issues (${data.issues.length})</div>`;
+      for (const issue of data.issues) {
+        const isCritical = issue.startsWith('FAILED') || issue.startsWith('DOWN') || issue.startsWith('UNREACHABLE');
+        html += `<div class="health-issue ${isCritical ? 'critical' : 'degraded'}">${issue}</div>`;
+      }
+      html += `</div>`;
+    }
+    
+    // Cron job grid
+    if (data.cron_jobs) {
+      html += `<div style="padding: 12px 20px 4px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-dim);">Cron Jobs</div>`;
+      html += `<div class="health-cron-grid">`;
+      for (const [jobId, job] of Object.entries(data.cron_jobs)) {
+        const status = job.last_status;
+        const dotClass = status === 'ok' ? 'ok' : status === 'error' ? 'error' : 'never';
+        const itemClass = dotClass;
+        const lastRun = job.last_run ? (() => {
+          try {
+            const d = new Date(job.last_run);
+            return d.toLocaleTimeString();
+          } catch { return '—'; }
+        })() : 'Never';
+        
+        html += `<div class="health-cron-item ${itemClass}">`;
+        html += `<div class="health-cron-dot ${dotClass}"></div>`;
+        html += `<span class="health-cron-name" title="${job.name}">${job.name}</span>`;
+        html += `<span class="health-cron-time">${lastRun}</span>`;
+        html += `</div>`;
+      }
+      html += `</div>`;
+    }
+    
+    // Anomalies
+    if (data.anomalies && data.anomalies.length > 0) {
+      html += `<div style="padding: 12px 20px 4px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-dim);">Output Anomalies</div>`;
+      html += `<div style="padding: 8px 20px 12px;">`;
+      for (const a of data.anomalies) {
+        html += `<div class="health-issue"><strong>${a.type}</strong>: ${a.job_name} — ${a.message}</div>`;
+      }
+      html += `</div>`;
+    }
+    
+    return html;
+  } catch (e) {
+    return `<div class="health-empty"><div class="icon">⚠️</div>Error loading health: ${e.message}</div>`;
+  }
+}
+
 async function render() {
   updateClock();
 
@@ -930,11 +1164,40 @@ async function render() {
   cards.innerHTML = '';
   summary.innerHTML = '';
 
+  // ── Health Tile (first) ──
+  const healthCard = document.createElement('div');
+  healthCard.className = 'card full-width';
+  healthCard.innerHTML = `
+    <div class="card-header">
+      <div class="card-title">
+        <span class="icon">🔍</span>
+        Swarm Health Monitor
+      </div>
+      <span class="card-badge badge-empty" id="health-badge">Loading...</span>
+    </div>
+    <div class="card-body" id="health-body" style="padding: 0;">
+      <div class="health-empty"><div class="icon">⏳</div>Loading health data...</div>
+    </div>
+  `;
+  cards.appendChild(healthCard);
+
   let totalJobs = JOB_CONFIGS.length;
   let activeJobs = 0;
 
   // Load competitor data once
   const compData = await loadCompetitorData();
+
+  // Load health data
+  const healthData = await fetch('/api/health').then(r => r.ok ? r.json() : null).catch(() => null);
+  if (healthData) {
+    const healthBody = document.getElementById('health-body');
+    const healthBadge = document.getElementById('health-badge');
+    const overall = healthData.overall || 'unknown';
+    const badgeClass = overall === 'healthy' ? 'badge-fresh' : overall === 'degraded' ? 'badge-stale' : 'badge-empty';
+    healthBadge.className = `card-badge ${badgeClass}`;
+    healthBadge.textContent = overall.charAt(0).toUpperCase() + overall.slice(1);
+    healthBody.innerHTML = await renderHealthTile();
+  }
 
   for (const config of JOB_CONFIGS) {
     const data = await loadJob(config.id);
