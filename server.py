@@ -17,10 +17,8 @@ OUTPUT_FILES = {
     'research-digest': DATA_DIR / 'research-digest-latest.md',
     'hn': DATA_DIR / 'hn-latest.md',
     'polymarket': DATA_DIR / 'polymarket-latest.md',
-    'github': DATA_DIR / 'github-latest.md',
     'techblogs': DATA_DIR / 'techblogs-latest.md',
     'papers': DATA_DIR / 'papers-latest.md',
-    'github-repos': DATA_DIR / 'github-repos-latest.md',
     'competitors': DATA_DIR / 'competitors-latest.md',
 }
 
